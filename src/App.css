@@ -1,8 +1,10 @@
-.App {
-  padding: 30px;
-  display: flex;
+li {
+  list-style: none;
 }
-
-.App > div {
-  margin-right: 50px;
+.MuiContainer-root {
+  margin-top: 70px;
+}
+.btn_remove {
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
