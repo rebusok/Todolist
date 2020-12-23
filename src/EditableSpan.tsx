@@ -7,7 +7,8 @@ type EditableSpanType = {
     blured: boolean
 }
 
-const EditableSpan = (props:EditableSpanType) => {
+const EditableSpan = React.memo((props:EditableSpanType) => {
+    console.log('CAAALLL span')
     const [editMode, setEditMode] = useState<boolean>(false);
     const [title, setTitle] = useState<string>(props.value)
     const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +30,6 @@ const EditableSpan = (props:EditableSpanType) => {
             ? <span onDoubleClick={activateEditMode}>{props.value}</span>
             : <h3 onDoubleClick={activateEditMode}>{props.value}</h3>
     )
-}
+})
 
 export default EditableSpan;

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import TodoList from "./todoList";
 import { v1 } from 'uuid';
@@ -87,15 +87,15 @@ const App = () =>{
         }
     }
 
-    const changeTitle =  (value:string , todoListId: string) => {
+    const changeTitle =  useCallback((value:string , todoListId: string) => {
         let todolist1 = todoList.find(tl => tl.id === todoListId);
         if(todolist1){
             todolist1.title = value;
             setTodoList([ ...todoList])
         }
-    }
+    },[])
 
-    const changeTaskInput = (id:string, title:string, todoListId:string) =>{
+    const changeTaskInput = useCallback((id:string, title:string, todoListId:string) =>{
 
         const todoListTasks = tasks[todoListId];
         const task = todoListTasks.find(t => t.id === id);
@@ -103,12 +103,12 @@ const App = () =>{
             task.title = title
             setTask({...tasks})
         }
-    }
+    },[])
 
-    const removeTodoList = (todoListId:string) => {
+    const removeTodoList = useCallback((todoListId:string) => {
         setTodoList(todoList.filter(tl => tl.id !== todoListId));
         delete tasks[todoListId];
-    }
+    },[])
 
     const filteredTodoList = (arrTodo:Array<TaskType>, filter:FilterType) => {
         switch (filter) {
@@ -118,7 +118,7 @@ const App = () =>{
         }
     }
 
-    const addTodoList =  (title: string) => {
+    const addTodoList =  useCallback((title: string) => {
         const newTodoListId = v1();
         const newTodoList: TodoListType = {
             id: newTodoListId,
@@ -130,7 +130,7 @@ const App = () =>{
             ...tasks,
             [newTodoListId]: []
         })
-    }
+    }, [])
 
     return (
         <div className="App">

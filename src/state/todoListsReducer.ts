@@ -5,10 +5,7 @@ export type ActionType = RemoveTodolistActionType | AddTodolistActionType | Chan
 export const todoListId1 = v1();
 export const todoListId2 = v1();
 
-const initialState: Array<TodoListType> = [
-    {id: todoListId1, title: 'What to learn', filter: 'All'},
-    {id: todoListId2, title: 'What to buy', filter: 'All'}
-]
+const initialState: Array<TodoListType> = []
 export type RemoveTodolistActionType = {
     type: 'REMOVE-TODOLIST'
     id: string

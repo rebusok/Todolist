@@ -7,15 +7,18 @@ type AddItemFormType = {
     addItem: (title: string) => void
 }
 
-const AddItemForm = (props:AddItemFormType) => {
+const AddItemForm = React.memo((props:AddItemFormType) => {
     const [value, setTitle] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
+
     const onTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setError(null);
         setTitle(e.currentTarget.value);
     }
     const onTitleKeyHandler = (e:KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error !==null){
+            setError(null)
+        }
         if (e.key === "Enter"){
             callBackAddItem();
         }
@@ -40,7 +43,7 @@ const AddItemForm = (props:AddItemFormType) => {
                 error={!!error}
                 label={'Title'}
                 helperText={error}
-                />
+            />
             <IconButton
                 color='primary'
                 onClick={callBackAddItem}>
@@ -49,6 +52,6 @@ const AddItemForm = (props:AddItemFormType) => {
 
         </div>
     )
-}
+})
 
 export default AddItemForm;
