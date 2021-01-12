@@ -1,46 +1,34 @@
 import React, {useEffect, useState} from 'react'
-import { API } from '../API/API'
+import {APITask} from "../API/API";
+
 
 export default {
     title: 'API'
 }
-
-export const GetTodolists = () => {
+const todoId = 'a6d86e13-d5ee-42b0-bf09-ca8d988e7f8d'
+export const GetTask = () => {
     const [state, setState] = useState<any>(null)
+
     useEffect(() => {
         // здесь мы будем делать запрос и ответ закидывать в стейт.
         // который в виде строки будем отображать в div-ке
-
-        API.getTodoList().then(res => {
+        APITask.getTask(todoId).then(res => {
             console.log(res)
-            setState(res.data)
+            setState(res.data.items)
         })
+
 
     }, [])
 
     return <div> {JSON.stringify(state)}</div>
 }
-export const CreateTodolist = () => {
+export const CreateTask = () => {
     const [state, setState] = useState<any>(null)
+
     useEffect(() => {
         // здесь мы будем делать запрос и ответ закидывать в стейт.
         // который в виде строки будем отображать в div-ке
-        API.createTodoList('NewTODONOW').then(res => {
-            console.log(res)
-            setState(res.data)
-        })
-    }, [])
-
-    return <div> {JSON.stringify(state)}</div>
-}
-export const DeleteTodolist = () => {
-    const [state, setState] = useState<any>(null)
-    const todoId = '9edef8c1-80be-4862-9110-9214a3af9369'
-    useEffect(() => {
-        // здесь мы будем делать запрос и ответ закидывать в стейт.
-        // который в виде строки будем отображать в div-ке
-        API.deleteTodoList(todoId).then(res => {
-
+        APITask.createTask(todoId, 'NewTaskTest').then(res => {
             console.log(res)
             setState(res.data)
         })
@@ -48,16 +36,30 @@ export const DeleteTodolist = () => {
 
     return <div> {JSON.stringify(state)}</div>
 }
-export const UpdateTodolistTitle = () => {
+export const DeleteTask = () => {
     const [state, setState] = useState<any>(null)
-    const todoId = 'a6d86e13-d5ee-42b0-bf09-ca8d988e7f8d'
+    const taskId = "75faa54c-2af7-4c37-8862-f597694980e2"
     useEffect(() => {
         // здесь мы будем делать запрос и ответ закидывать в стейт.
         // который в виде строки будем отображать в div-ке
-        API.updateTodoList(todoId, 'TEST_UPDATE').then(res => {
-            console.log(res)
-            setState(res.data)
-        })
+    APITask.deleteTask(todoId,taskId).then(res => {
+        console.log(res)
+        setState(res.data)
+    })
+    }, [])
+
+    return <div> {JSON.stringify(state)}</div>
+}
+export const UpdateTask= () => {
+    const [state, setState] = useState<any>(null)
+    const taskId = 'a275bc59-ee36-4ffd-9efc-963b01f01a30'
+    useEffect(() => {
+        // здесь мы будем делать запрос и ответ закидывать в стейт.
+        // который в виде строки будем отображать в div-ке
+    APITask.updateTask(todoId,taskId,'REACT').then(res => {
+        console.log(res)
+        setState(res.data)
+    })
 
     }, [])
 
