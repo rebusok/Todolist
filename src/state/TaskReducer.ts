@@ -1,5 +1,5 @@
 
-import {TaskStateTask} from '../App'
+
 import {v1} from "uuid";
 import {AddTodolistActionType, RemoveTodolistActionType} from "./todoListsReducer";
 
@@ -12,6 +12,27 @@ export type ActionType =
     ChangeTaskTitleActionType |
     RemoveTodolistActionType |
     AddTodolistActionType
+
+export type TaskStateTask = {
+
+    [key: string] : Array<TaskDomainType>
+
+}
+export type TaskType = {
+    addedDate: string
+    deadline: string
+    description: string
+    id: string
+    order: number
+    priority: number
+    startDate: string
+    status: number
+    title: string
+    todoListId: string
+}
+export type TaskDomainType = TaskType & {
+    isDone:boolean
+}
 
 export type RemoveTaskType = {
     type: 'REMOVE-TASK'
@@ -44,7 +65,19 @@ export const TasksReducer = (state: TaskStateTask = initialState, action: Action
             state[action.TodoListId] = state[action.TodoListId].filter(t => t.id !== action.taskId);
             return {...state}
         case 'ADD-TASK':
-            let task = {id: v1(), title: action.value, isDone: false};
+            let task = {
+                id: v1(),
+                title: action.value,
+                isDone: false,
+                addedDate:'',
+                deadline:'',
+                description: '',
+                order: 6,
+                priority: 0,
+                startDate: '',
+                status: 0,
+                todoListId: action.TodoListId
+            };
             let todolistTasks = state[action.TodoListId];
             state[action.TodoListId] = [task, ...todolistTasks];
             return {...state}

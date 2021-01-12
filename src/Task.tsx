@@ -2,10 +2,11 @@ import React from 'react';
 import {Checkbox, IconButton} from "@material-ui/core";
 import EditableSpan from "./EditableSpan";
 import {Delete} from "@material-ui/icons";
-import {TaskType} from "./AppWithReducers";
+import {TaskDomainType} from "./state/TaskReducer";
+
 
 type TaskPropsType = {
-    task: TaskType
+    task: TaskDomainType
     onChangTaskStatus: (id:string,isDone:boolean) => void
     onChanges: (id:string,title:string) => void
     onDeleteHandler: (id:string) => void

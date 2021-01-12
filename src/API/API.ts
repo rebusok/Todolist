@@ -1,4 +1,6 @@
 import axios from "axios";
+import { TodolistType } from "../state/todoListsReducer";
+import { TaskType } from "../state/TaskReducer";
 
 const key = "be583272-b0d8-4135-8f53-6b8fcf5092e2";
 const configOMB = {
@@ -9,30 +11,14 @@ const configOMB = {
     }
 };
 
-type TodolistType= {
-    id: string
-    addedDate: string
-    order: number
-    title: string
-}
+
 type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>
     fieldsErrors: Array<string>
     data: D
 }
-type TaskType = {
-    addedDate: string
-    deadline: string
-    description: string
-    id: string
-    order: number
-    priority: number
-    startDate: string
-    status: number
-    title: string
-    todoListId: string
-}
+
 
 
 const axiosInstance = axios.create(configOMB);

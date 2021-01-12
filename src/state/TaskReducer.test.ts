@@ -1,16 +1,8 @@
+import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC, TasksReducer} from "./TaskReducer";
 
-import {TaskStateTask, TodoListType} from '../App';
-import {
-    AddTaskAC,
-    ChangeTaskStatusAC,
-    ChangeTaskTitleAC,
-    RemoveTaskAC,
-    TasksReducer
-} from "./TaskReducer";
+import {AddTodolistAC, RemoveTodolistAC, TodoListDomainType, todolistsReducer} from "./todoListsReducer";
 
-import {AddTodolistAC, RemoveTodolistAC, todolistsReducer} from "./todoListsReducer";
-
-let startState: TaskStateTask = {}
+let startState: any = {}
 
 beforeEach(() => {
     startState = {
@@ -93,8 +85,8 @@ test('new array should be added when new todolist is added', () => {
     expect(endState[newKey]).toEqual([]);
 });
 test('ids should be equals', () => {
-    const startTasksState: TaskStateTask = {};
-    const startTodolistsState: Array<TodoListType> = [];
+    const startTasksState: any = {};
+    const startTodolistsState: Array<TodoListDomainType> = [];
 
     const action = AddTodolistAC("new todolist");
 

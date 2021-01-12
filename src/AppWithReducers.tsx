@@ -3,39 +3,26 @@ import './App.css';
 import TodoList from "./todoList";
 
 import AddItemForm from "./AddItemForm";
-import {AppBar, Toolbar, IconButton, Typography, Button, Grid, Container, Paper} from "@material-ui/core";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 
 import {Menu} from "@material-ui/icons";
-import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC} from "./state/TaskReducer";
+import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC, TaskStateTask} from "./state/TaskReducer";
 import {
     AddTodolistAC,
     ChangeTodolistFilterAC,
     ChangeTodolistTitleAC,
+    FilterType,
     RemoveTodolistAC,
+    TodoListDomainType,
 } from "./state/todoListsReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
-import {TaskStateTask} from "./App";
 
-
-export type TaskType = {
-    id: string;
-    title: string;
-    isDone: boolean;
-};
-
-export type FilterType = 'All' | 'Active' | 'Completed';
-
-export type TodoListType = {
-    id: string;
-    title: string;
-    filter: FilterType
-}
 
 const AppWithReducers = () => {
 
 
-    const todoList = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
+    const todoList = useSelector<AppRootStateType, Array<TodoListDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TaskStateTask>(state => state.tasks)
     const dispatch = useDispatch()
 
@@ -75,10 +62,10 @@ const AppWithReducers = () => {
     }, [dispatch])
 
 
-    const addTodoList = useCallback((title: string) => {
+    const addTodoList = async (title: string) => {
         const action = AddTodolistAC(title)
         dispatch(action)
-    }, [dispatch])
+    }
 
     return (
         <div className="App">
@@ -90,7 +77,7 @@ const AppWithReducers = () => {
                     <Typography variant={'h6'}>
                         News
                     </Typography>
-                    <Button color={'inherit'}> login</Button>
+                    <Button color={'inherit'} > login</Button>
                 </Toolbar>
             </AppBar>
             <Container fixed>

@@ -1,14 +1,17 @@
 import React, {useCallback} from "react";
-import {TaskType, FilterType} from './App';
+
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
 import {Button} from "@material-ui/core";
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import Task from "./Task";
+import {TaskDomainType} from "./state/TaskReducer";
+import {FilterType} from "./state/todoListsReducer";
+
 type PropsType = {
     title: string;
-    tasks: Array<TaskType>;
+    tasks: Array<TaskDomainType>;
     deleteTask: (id: string, todoListId: string) => void;
     changeFilter: (value: FilterType, todoListId: string) => void;
     addTask: (value: string, todoListId: string) => void;
