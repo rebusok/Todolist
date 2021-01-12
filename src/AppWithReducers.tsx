@@ -6,7 +6,14 @@ import AddItemForm from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 
 import {Menu} from "@material-ui/icons";
-import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC, TaskStateTask} from "./state/TaskReducer";
+import {
+    AddTaskAC,
+    ChangeTaskStatusAC,
+    ChangeTaskTitleAC,
+    RemoveTaskAC,
+    TaskStateTask,
+    TaskStatuses
+} from "./state/TaskReducer";
 import {
     AddTodolistAC,
     ChangeTodolistFilterAC,
@@ -20,12 +27,9 @@ import {AppRootStateType} from "./state/store";
 
 
 const AppWithReducers = () => {
-
-
     const todoList = useSelector<AppRootStateType, Array<TodoListDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TaskStateTask>(state => state.tasks)
     const dispatch = useDispatch()
-
     const deleteTask = useCallback((id: string, todoListId: string) => {
         dispatch(RemoveTaskAC(id, todoListId))
     }, [dispatch])
@@ -35,8 +39,8 @@ const AppWithReducers = () => {
     }, [dispatch])
 
 
-    const changeTaskStatus = useCallback((id: string, isDone: boolean, todoListId: string) => {
-        dispatch(ChangeTaskStatusAC(id, isDone, todoListId))
+    const changeTaskStatus = useCallback((id: string, status: TaskStatuses, todoListId: string) => {
+        dispatch(ChangeTaskStatusAC(id, status, todoListId))
     }, [dispatch])
 
     const changeFilter = useCallback((value: FilterType, todoListId: string) => {

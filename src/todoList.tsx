@@ -6,7 +6,7 @@ import {Button} from "@material-ui/core";
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import Task from "./Task";
-import {TaskDomainType} from "./state/TaskReducer";
+import {TaskDomainType, TaskStatuses} from "./state/TaskReducer";
 import {FilterType} from "./state/todoListsReducer";
 
 type PropsType = {
@@ -15,7 +15,7 @@ type PropsType = {
     deleteTask: (id: string, todoListId: string) => void;
     changeFilter: (value: FilterType, todoListId: string) => void;
     addTask: (value: string, todoListId: string) => void;
-    changeTaskStatus: (id: string, isDone: boolean, todoListId: string) => void
+    changeTaskStatus: (id: string, status: TaskStatuses, todoListId: string) => void
     filter: FilterType
     idTodo: string
     removeTodoList: (todoListId: string) => void
@@ -41,13 +41,13 @@ const TodoList = React.memo((props: PropsType) => {
 
     let filteredTodoList = tasks;
     if(filter === 'Active'){
-        filteredTodoList = tasks.filter(t => !t.isDone)
+        filteredTodoList = tasks.filter(t => t.status === TaskStatuses.New)
     }
     if(filter === 'Completed'){
-        filteredTodoList = tasks.filter(t => t.isDone)
+        filteredTodoList = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
-    const onChangTaskStatus = useCallback((id:string,isDone:boolean) => {
-        changeTaskStatus(id, isDone, idTodo);
+    const onChangTaskStatus = useCallback((id:string,status: TaskStatuses) => {
+        changeTaskStatus(id, status, idTodo);
     }, [changeTaskStatus, idTodo])
     const onChanges = useCallback((id:string,title:string) => {
         changeInput(id,title, idTodo)

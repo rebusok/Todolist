@@ -26,12 +26,18 @@ export type TaskType = {
     order: number
     priority: number
     startDate: string
-    status: number
+    status: TaskStatuses
     title: string
     todoListId: string
 }
 export type TaskDomainType = TaskType & {
-    isDone:boolean
+    status: TaskStatuses
+}
+export enum TaskStatuses  {
+    New = 0,
+    inProgress = 1,
+    Completed= 2,
+    Draft = 3
 }
 
 export type RemoveTaskType = {
@@ -48,7 +54,7 @@ export type AddTaskActionType = {
 export type ChangeTaskStatusActionType = {
     type: 'CHANGE-TASK-STATUS'
     taskId:string
-    isDone:boolean
+    status: TaskStatuses
     todoListId:string
 }
 export type ChangeTaskTitleActionType = {
@@ -68,14 +74,13 @@ export const TasksReducer = (state: TaskStateTask = initialState, action: Action
             let task = {
                 id: v1(),
                 title: action.value,
-                isDone: false,
                 addedDate:'',
                 deadline:'',
                 description: '',
                 order: 6,
                 priority: 0,
                 startDate: '',
-                status: 0,
+                status: TaskStatuses.New,
                 todoListId: action.TodoListId
             };
             let todolistTasks = state[action.TodoListId];
@@ -87,7 +92,7 @@ export const TasksReducer = (state: TaskStateTask = initialState, action: Action
                 [action.todoListId]: state[action.todoListId]
                     .map(task => task.id !== action.taskId
                         ? task
-                        : {...task, isDone: action.isDone})
+                        : {...task, status: action.status})
             }
         case "CHANGE-TASK-TITLE":
             return {
@@ -116,8 +121,8 @@ export const AddTaskAC = (value: string, TodoListId: string): AddTaskActionType 
     return { type: "ADD-TASK", value, TodoListId }
 }
 
-export const ChangeTaskStatusAC = (taskId:string, isDone:boolean, todoListId:string):ChangeTaskStatusActionType => {
-    return {type: 'CHANGE-TASK-STATUS',taskId, isDone, todoListId}
+export const ChangeTaskStatusAC = (taskId:string, status: TaskStatuses, todoListId:string):ChangeTaskStatusActionType => {
+    return {type: 'CHANGE-TASK-STATUS',taskId, status, todoListId}
 }
 export const ChangeTaskTitleAC = (taskId:string, title:string, todoListId:string):ChangeTaskTitleActionType => {
     return {type: 'CHANGE-TASK-TITLE',taskId, title, todoListId}

@@ -12,7 +12,7 @@ import React from 'react';
 // export type TaskType = {
 //     id: string;
 //     title: string;
-//     isDone: boolean;
+//     status: TaskStatuses;
 // };
 //
 //
@@ -62,7 +62,7 @@ import React from 'react';
 //
 //
 //
-//     const changeTaskStatus = (id:string, isDone:boolean, todoListId:string) =>{
+//     const changeTaskStatus = (id:string, status: TaskStatuses, todoListId:string) =>{
 //
 //         const todoListTasks = tasks[todoListId];
 //         const task = todoListTasks.find(t => t.id === id);

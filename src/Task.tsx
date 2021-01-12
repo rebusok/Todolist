@@ -2,24 +2,24 @@ import React from 'react';
 import {Checkbox, IconButton} from "@material-ui/core";
 import EditableSpan from "./EditableSpan";
 import {Delete} from "@material-ui/icons";
-import {TaskDomainType} from "./state/TaskReducer";
-
+import {TaskDomainType, TaskStatuses} from "./state/TaskReducer";
+import s from './Task.module.css'
 
 type TaskPropsType = {
     task: TaskDomainType
-    onChangTaskStatus: (id:string,isDone:boolean) => void
+    onChangTaskStatus: (id:string,status: TaskStatuses) => void
     onChanges: (id:string,title:string) => void
     onDeleteHandler: (id:string) => void
 }
 
 
-const Task = React.memo(({task:{isDone, title, id},onChangTaskStatus, onChanges, onDeleteHandler}:TaskPropsType) => {
+const Task = React.memo(({task:{status, title, id},onChangTaskStatus, onChanges, onDeleteHandler}:TaskPropsType) => {
     return (
-        <div  className={isDone ? 'is-done' : ''}>
+        <div  className={status === TaskStatuses.Completed ? s.is_done : ''}>
             <Checkbox
                 color='primary'
-                checked={isDone}
-                onChange={(e) => onChangTaskStatus(id, e.currentTarget.checked)}/>
+                checked={status ===TaskStatuses.Completed}
+                onChange={(e) => onChangTaskStatus(id, e.currentTarget.checked? TaskStatuses.Completed:TaskStatuses.New)}/>
             <EditableSpan value={title} onChanges={() => onChanges(id,title)} blured={true}/>
             <IconButton
                 onClick={() => onDeleteHandler(id)}>
