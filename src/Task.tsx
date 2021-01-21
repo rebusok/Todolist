@@ -14,13 +14,17 @@ type TaskPropsType = {
 
 
 const Task = React.memo(({task:{status, title, id},onChangTaskStatus, onChanges, onDeleteHandler}:TaskPropsType) => {
+   const onChangeTitle = (value:string) => {
+       onChanges(id, value)
+   }
+
     return (
         <div  className={status === TaskStatuses.Completed ? s.is_done : ''}>
             <Checkbox
                 color='primary'
                 checked={status ===TaskStatuses.Completed}
                 onChange={(e) => onChangTaskStatus(id, e.currentTarget.checked? TaskStatuses.Completed:TaskStatuses.New)}/>
-            <EditableSpan value={title} onChanges={() => onChanges(id,title)} blured={true}/>
+            <EditableSpan value={title} onChanges={onChangeTitle} blured={true}/>
             <IconButton
                 onClick={() => onDeleteHandler(id)}>
                 <Delete/>

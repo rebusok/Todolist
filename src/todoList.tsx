@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
@@ -6,56 +6,71 @@ import {Button} from "@material-ui/core";
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import Task from "./Task";
-import {TaskDomainType, TaskStatuses} from "./state/TaskReducer";
-import {FilterType} from "./state/todoListsReducer";
+import {
+    addTaskT, ChangeTaskTitleF,
+    getTaskTodoT,
+    removeTaskT,
+    TaskDomainType,
+    TaskStatuses,
+    updateTaskStatusTC
+} from "./state/TaskReducer";
+import {ChangeTodolistTitleF, FilterType, removeTodoListT} from "./state/todoListsReducer";
+import {useDispatch} from "react-redux";
 
 type PropsType = {
     title: string;
     tasks: Array<TaskDomainType>;
-    deleteTask: (id: string, todoListId: string) => void;
     changeFilter: (value: FilterType, todoListId: string) => void;
-    addTask: (value: string, todoListId: string) => void;
-    changeTaskStatus: (id: string, status: TaskStatuses, todoListId: string) => void
     filter: FilterType
     idTodo: string
-    removeTodoList: (todoListId: string) => void
-    changeInput: (id: string, title: string, todoListId: string) => void
-    changeTitle: (value: string, todoListId: string) => void;
 }
 
 
 const TodoList = React.memo((props: PropsType) => {
-    console.log("Todolist called")
-    const {tasks,changeInput,changeTitle, filter, removeTodoList, title, deleteTask, changeFilter, addTask, changeTaskStatus, idTodo} = props;
-    const addTasks = useCallback((value: string) => {
-        addTask(value, idTodo)
-    },[addTask, idTodo])
-    const onChangesTitle = useCallback((value:string) => {
-        changeTitle(value, idTodo)
-    },[changeTitle, idTodo])
-    const onRemoveHandler = useCallback(() => {
-        removeTodoList(idTodo)
-    },[removeTodoList, idTodo])
 
+    const {tasks, filter, title, changeFilter, idTodo} = props;
+    const dispatch = useDispatch();
+    const stableDispatch = useCallback(dispatch, [])
+
+    useEffect(() => {
+        stableDispatch(getTaskTodoT(idTodo))
+    }, [stableDispatch, idTodo])
+
+
+    const addTasks = useCallback((value: string) => {
+        stableDispatch(addTaskT(idTodo, value))
+    }, [stableDispatch, idTodo])
+
+
+    const onChangesTitle = useCallback((value: string) => {
+        stableDispatch(ChangeTodolistTitleF(idTodo, value))
+    }, [stableDispatch, idTodo])
+
+
+    const onRemoveHandler = useCallback(() => {
+        stableDispatch(removeTodoListT(idTodo))
+    }, [stableDispatch, idTodo])
 
 
     let filteredTodoList = tasks;
-    if(filter === 'Active'){
+    if (filter === 'Active') {
         filteredTodoList = tasks.filter(t => t.status === TaskStatuses.New)
     }
-    if(filter === 'Completed'){
+    if (filter === 'Completed') {
         filteredTodoList = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
-    const onChangTaskStatus = useCallback((id:string,status: TaskStatuses) => {
-        changeTaskStatus(id, status, idTodo);
-    }, [changeTaskStatus, idTodo])
-    const onChanges = useCallback((id:string,title:string) => {
-        changeInput(id,title, idTodo)
-    },[changeInput,idTodo])
-    const onDeleteHandler = useCallback((id:string) => {
-        deleteTask(id, idTodo)
-    }, [deleteTask,  idTodo])
+    const onChangTaskStatus = useCallback((id: string, status: TaskStatuses) => {
+        stableDispatch(updateTaskStatusTC(id, idTodo, status));
+    }, [stableDispatch, idTodo])
 
+    const onChangesTaskTitle = useCallback((id: string, title: string) => {
+        debugger
+        stableDispatch(ChangeTaskTitleF(id, title, idTodo))
+    }, [stableDispatch, idTodo])
+
+    const onDeleteHandler = useCallback((id: string) => {
+        stableDispatch(removeTaskT(id, idTodo))
+    }, [stableDispatch, idTodo])
 
 
     const onChangeAllHandler = () => changeFilter('All', idTodo);
@@ -70,7 +85,8 @@ const TodoList = React.memo((props: PropsType) => {
                 {
                     filteredTodoList.map(t => {
                         return (
-                            <Task task={t} onChangTaskStatus={onChangTaskStatus} onChanges={onChanges} onDeleteHandler={onDeleteHandler} key={t.id}/>
+                            <Task task={t} onChangTaskStatus={onChangTaskStatus} onChanges={onChangesTaskTitle}
+                                  onDeleteHandler={onDeleteHandler} key={t.id}/>
                         )
                     })
                 }

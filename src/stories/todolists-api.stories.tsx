@@ -12,7 +12,6 @@ export const GetTodolists = () => {
         // который в виде строки будем отображать в div-ке
 
         API.getTodoList().then(res => {
-            console.log(res)
             setState(res.data)
         })
 
@@ -26,7 +25,6 @@ export const CreateTodolist = () => {
         // здесь мы будем делать запрос и ответ закидывать в стейт.
         // который в виде строки будем отображать в div-ке
         API.createTodoList('NewTODONOW').then(res => {
-            console.log(res)
             setState(res.data)
         })
     }, [])
@@ -40,8 +38,6 @@ export const DeleteTodolist = () => {
         // здесь мы будем делать запрос и ответ закидывать в стейт.
         // который в виде строки будем отображать в div-ке
         API.deleteTodoList(todoId).then(res => {
-
-            console.log(res)
             setState(res.data)
         })
     }, [])
@@ -55,7 +51,6 @@ export const UpdateTodolistTitle = () => {
         // здесь мы будем делать запрос и ответ закидывать в стейт.
         // который в виде строки будем отображать в div-ке
         API.updateTodoList(todoId, 'TEST_UPDATE').then(res => {
-            console.log(res)
             setState(res.data)
         })
 

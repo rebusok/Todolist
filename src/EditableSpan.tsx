@@ -8,7 +8,6 @@ type EditableSpanType = {
 }
 
 const EditableSpan = React.memo((props:EditableSpanType) => {
-    console.log('CAAALLL span')
     const [editMode, setEditMode] = useState<boolean>(false);
     const [title, setTitle] = useState<string>(props.value)
     const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
