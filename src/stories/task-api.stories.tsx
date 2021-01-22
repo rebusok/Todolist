@@ -52,14 +52,14 @@ export const DeleteTask = () => {
 }
 export const UpdateTask= () => {
     const [state, setState] = useState<any>(null)
-    const taskId = 'a275bc59-ee36-4ffd-9efc-963b01f01a30'
+    // const taskId = 'a275bc59-ee36-4ffd-9efc-963b01f01a30'
     useEffect(() => {
         // здесь мы будем делать запрос и ответ закидывать в стейт.
         // который в виде строки будем отображать в div-ке
-    APITask.updateTask(todoId,taskId,'REACT').then(res => {
-        console.log(res)
-        setState(res.data)
-    })
+    // APITask.updateTask(todoId,taskId,'REACT').then(res => {
+    //     console.log(res)
+    //     setState(res.data)
+    // })
 
     }, [])
 

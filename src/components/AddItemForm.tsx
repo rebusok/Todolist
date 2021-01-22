@@ -1,10 +1,12 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import { IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
+import {RequestStatusType} from "../App/app-reducer";
 
 
 type AddItemFormType = {
     addItem: (title: string) => void
+    entityStatus?: RequestStatusType
 }
 
 const AddItemForm = React.memo((props:AddItemFormType) => {
@@ -46,7 +48,9 @@ const AddItemForm = React.memo((props:AddItemFormType) => {
             />
             <IconButton
                 color='primary'
-                onClick={callBackAddItem}>
+                onClick={callBackAddItem}
+                disabled={props.entityStatus === "loading"}
+            >
                 <AddBox/>
             </IconButton>
 

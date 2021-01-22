@@ -5,6 +5,7 @@ type EditableSpanType = {
     value:string
     onChanges: (newValue:string) => void
     blured: boolean
+
 }
 
 const EditableSpan = React.memo((props:EditableSpanType) => {

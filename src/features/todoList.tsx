@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from "react";
 
-import AddItemForm from "./AddItemForm";
-import EditableSpan from "./EditableSpan";
+import AddItemForm from "../components/AddItemForm";
+import EditableSpan from "../components/EditableSpan";
 import {Button} from "@material-ui/core";
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -13,9 +13,10 @@ import {
     TaskDomainType,
     TaskStatuses,
     updateTaskStatusTC
-} from "./state/TaskReducer";
-import {ChangeTodolistTitleF, FilterType, removeTodoListT} from "./state/todoListsReducer";
+} from "./TaskReducer";
+import {ChangeTodolistTitleF, FilterType, removeTodoListT} from "./todoListsReducer";
 import {useDispatch} from "react-redux";
+import {RequestStatusType} from "../App/app-reducer";
 
 type PropsType = {
     title: string;
@@ -23,6 +24,7 @@ type PropsType = {
     changeFilter: (value: FilterType, todoListId: string) => void;
     filter: FilterType
     idTodo: string
+    entityStatus: RequestStatusType
 }
 
 
@@ -80,13 +82,13 @@ const TodoList = React.memo((props: PropsType) => {
     return (
         <div>
             <EditableSpan value={title} onChanges={onChangesTitle} blured={false}/>
-            <AddItemForm addItem={addTasks}/>
+            <AddItemForm addItem={addTasks} entityStatus={props.entityStatus}/>
             <div>
                 {
                     filteredTodoList.map(t => {
                         return (
                             <Task task={t} onChangTaskStatus={onChangTaskStatus} onChanges={onChangesTaskTitle}
-                                  onDeleteHandler={onDeleteHandler} key={t.id}/>
+                                  onDeleteHandler={onDeleteHandler} entityStatus ={props.entityStatus}  key={t.id}/>
                         )
                     })
                 }
@@ -113,7 +115,7 @@ const TodoList = React.memo((props: PropsType) => {
                 variant='contained'
                 color='secondary'
                 startIcon={<DeleteIcon/>}
-
+                disabled={props.entityStatus === "loading"}
                 onClick={onRemoveHandler}>
                 Remove List
             </Button>

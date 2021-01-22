@@ -1,6 +1,6 @@
 import axios from "axios";
-import { TodolistType } from "../state/todoListsReducer";
-import { TaskType } from "../state/TaskReducer";
+import { TodolistType } from "../features/todoListsReducer";
+import { TaskType } from "../features/TaskReducer";
 
 const key = "34263072-624d-43a5-8a5f-75afa7ad4af4";
 const configOMB = {
@@ -12,7 +12,7 @@ const configOMB = {
 };
 
 
-type ResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>
     fieldsErrors: Array<string>

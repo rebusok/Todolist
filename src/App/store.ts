@@ -5,21 +5,23 @@ import {
     ChangeTaskTitleActionType,
     RemoveTaskType, SetTasksActionType,
     TasksReducer
-} from "./TaskReducer";
+} from "../features/TaskReducer";
 import {
-    AddTodolistActionType, ChangeTodolistFilterActionType,
+    AddTodolistActionType, ChangeTodolistEntityStatus, ChangeTodolistFilterActionType,
     ChangeTodolistTitleActionType,
     RemoveTodolistActionType, SetTodolistsActionType,
     todolistsReducer
-} from "./todoListsReducer";
+} from "../features/todoListsReducer";
 import thunk, {ThunkAction} from "redux-thunk";
+import {appReducer, SetAppErrorActionType, SetAppStatusActionType} from './app-reducer';
 
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
     tasks: TasksReducer,
-    todolists: todolistsReducer
+    todolists: todolistsReducer,
+    app: appReducer
 })
 // непосредственно создаём store
 
@@ -37,6 +39,9 @@ export type AppActionType =
     | RemoveTodolistActionType
     | AddTodolistActionType
     | SetTasksActionType
+    | SetAppStatusActionType
+    | SetAppErrorActionType
+    | ChangeTodolistEntityStatus
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType,
     AppRootStateType,
     unknown,

@@ -1,19 +1,21 @@
 import React from 'react';
 import {Checkbox, IconButton} from "@material-ui/core";
-import EditableSpan from "./EditableSpan";
+import EditableSpan from "../components/EditableSpan";
 import {Delete} from "@material-ui/icons";
-import {TaskDomainType, TaskStatuses} from "./state/TaskReducer";
+import {TaskDomainType, TaskStatuses} from "./TaskReducer";
 import s from './Task.module.css'
+import {RequestStatusType} from "../App/app-reducer";
 
 type TaskPropsType = {
     task: TaskDomainType
     onChangTaskStatus: (id:string,status: TaskStatuses) => void
     onChanges: (id:string,title:string) => void
     onDeleteHandler: (id:string) => void
+    entityStatus: RequestStatusType
 }
 
 
-const Task = React.memo(({task:{status, title, id},onChangTaskStatus, onChanges, onDeleteHandler}:TaskPropsType) => {
+const Task = React.memo(({task:{status, title, id},onChangTaskStatus, onChanges, onDeleteHandler, entityStatus}:TaskPropsType) => {
    const onChangeTitle = (value:string) => {
        onChanges(id, value)
    }
@@ -23,10 +25,11 @@ const Task = React.memo(({task:{status, title, id},onChangTaskStatus, onChanges,
             <Checkbox
                 color='primary'
                 checked={status ===TaskStatuses.Completed}
+                disabled={entityStatus === "loading"}
                 onChange={(e) => onChangTaskStatus(id, e.currentTarget.checked? TaskStatuses.Completed:TaskStatuses.New)}/>
-            <EditableSpan value={title} onChanges={onChangeTitle} blured={true}/>
+            <EditableSpan value={title} onChanges={onChangeTitle} blured={true} />
             <IconButton
-                onClick={() => onDeleteHandler(id)}>
+                onClick={() => onDeleteHandler(id)} disabled={ entityStatus === "loading"}>
                 <Delete/>
             </IconButton>
         </div>
