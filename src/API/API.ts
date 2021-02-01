@@ -1,6 +1,6 @@
 import axios from "axios";
-import { TodolistType } from "../features/todoListsReducer";
-import { TaskType } from "../features/TaskReducer";
+import { TodolistType } from "../features/TodoList/todoListsReducer";
+import { TaskType } from "../features/Task/TaskReducer";
 
 const key = "34263072-624d-43a5-8a5f-75afa7ad4af4";
 const configOMB = {
@@ -69,4 +69,22 @@ export const APITask = {
         return axiosInstance.put<ResponseType<TaskType>>(`todo-lists/${todoId}/tasks/${taskId}`, model)
     }
 
+}
+type LoginPostType = {
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha?: string
+}
+
+export const authAPI = {
+    login(data:LoginPostType) {
+        return axiosInstance.post<ResponseType<{userId: number}>>('auth/login', data)
+    },
+    me() {
+        return axiosInstance.get<ResponseType<LoginPostType>>('auth/me')
+    },
+    logout() {
+        return axiosInstance.delete<ResponseType>('auth/login')
+    }
 }

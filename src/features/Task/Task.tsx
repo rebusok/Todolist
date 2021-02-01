@@ -1,10 +1,10 @@
 import React from 'react';
 import {Checkbox, IconButton} from "@material-ui/core";
-import EditableSpan from "../components/EditableSpan";
+import EditableSpan from "../../components/EditableSpan";
 import {Delete} from "@material-ui/icons";
 import {TaskDomainType, TaskStatuses} from "./TaskReducer";
 import s from './Task.module.css'
-import {RequestStatusType} from "../App/app-reducer";
+import {RequestStatusType} from "../../App/app-reducer";
 
 type TaskPropsType = {
     task: TaskDomainType

@@ -1,9 +1,9 @@
-import {AppActionType, AppRootStateType, AppThunk} from "../App/store";
-import {APITask, TaskPriorities} from "../API/API";
+import {AppActionType, AppRootStateType, AppThunk} from "../../App/store";
+import {APITask, TaskPriorities} from "../../API/API";
 import {Dispatch} from "redux";
-import {setErrorApp, setStatusApp} from "../App/app-reducer";
-import {changeTodolistEntityStatusAC} from "./todoListsReducer";
-import {handleServerAppError} from "../utils/error-utils";
+import {setErrorApp, setStatusApp} from "../../App/app-reducer";
+import {changeTodolistEntityStatusAC} from "../TodoList/todoListsReducer";
+import {handleServerAppError} from "../../utils/error-utils";
 
 
 const initialState: TaskStateTask = {}

@@ -1,8 +1,8 @@
 
-import {AppActionType, AppThunk} from "../App/store";
-import {API} from "../API/API";
-import {RequestStatusType, setErrorApp, setStatusApp} from "../App/app-reducer";
-import { handleServerAppError } from "../utils/error-utils";
+import {AppActionType, AppThunk} from "../../App/store";
+import {API} from "../../API/API";
+import {RequestStatusType, setErrorApp, setStatusApp} from "../../App/app-reducer";
+import { handleServerAppError } from "../../utils/error-utils";
 
 
 export type FilterType = 'All' | 'Active' | 'Completed';

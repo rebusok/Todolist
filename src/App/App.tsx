@@ -1,59 +1,45 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import TodoList from "../features/todoList";
-
-import AddItemForm from "../components/AddItemForm";
 import {
     AppBar,
     Button,
+    CircularProgress,
     Container,
-    Grid,
     IconButton,
     LinearProgress,
-    Paper,
     Toolbar,
     Typography
 } from "@material-ui/core";
 
 import {Menu} from "@material-ui/icons";
-import {TaskStateTask} from "../features/TaskReducer";
-import {
-    AddTodolistF,
-    ChangeTodolistFilterAC,
-    FilterType,
-    getTodolistT,
-    TodoListDomainType,
-} from "../features/todoListsReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {RequestStatusType} from "./app-reducer";
+import {initializeAppTC, RequestStatusType} from "./app-reducer";
+import {NavLink, Redirect, Route, Switch} from 'react-router-dom';
+import {Login} from '../features/Login/Login';
+import TodolistList from "../features/TodoList/TodolistList";
+import {logoutTC} from "../features/Login/auth-reducer";
 
 
 const App = () => {
-    const todoList = useSelector<AppRootStateType, Array<TodoListDomainType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TaskStateTask>(state => state.tasks)
     const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
-
+    const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
+    const isLoggenIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
     const stableDispatch = useCallback(dispatch, [])
-    useEffect(() =>{
-        stableDispatch(getTodolistT())
+    useEffect(() => {
+        stableDispatch(initializeAppTC())
     }, [stableDispatch])
-    const changeFilter = useCallback((value: FilterType, todoListId: string) => {
 
-        dispatch(ChangeTodolistFilterAC(todoListId, value))
-
-    }, [dispatch])
-
-
-
-
-
-
-    const addTodoList = (title: string) => {
-        dispatch(AddTodolistF(title))
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
     }
-
+    const LogOutHandler = () => {
+        dispatch(logoutTC())
+    }
     return (
         <div className="App">
             <AppBar>
@@ -64,39 +50,22 @@ const App = () => {
                     <Typography variant={'h6'}>
                         News
                     </Typography>
-                    <Button color={'inherit'} > login</Button>
+                    {isLoggenIn
+                        ? <Button className={'btn_app'} onClick={LogOutHandler}>Log Out</Button>
+                        : <NavLink to={'/login'} className={'link_app'}> login</NavLink>}
+
                 </Toolbar>
                 {status === "loading" && <LinearProgress color={"secondary"}/>}
             </AppBar>
-
             <Container fixed>
-                <Grid container style={{
-                    padding: '20px'
-                }}>
-                    <AddItemForm addItem={addTodoList}/>
-                </Grid>
-                <Grid container spacing={3}>
-                    {
-                        todoList.map(({id, title, filter, entityStatus}) => {
-                            return (
-                                <Grid item key={id}>
-                                    <Paper style={{padding: '10px'}}>
-                                        <TodoList
-                                            key={id}
-                                            idTodo={id}
-                                            title={title}
-                                            tasks={tasks[id]}
-                                            entityStatus={entityStatus}
-                                            changeFilter={changeFilter}
-                                            filter={filter}
-                                            />
-                                    </Paper>
-                                </Grid>
-                            )
-                        })
-                    }
-                </Grid>
+                <Switch>
+                    <Route exact path={'/'} render={() => <TodolistList/>}/>
+                    <Route component={Login}   path={'/login'}/>
+                    <Route path={'/404'}   render={() => <h1>404: PAGE NOT FOUND</h1>}/>
+                    <Redirect from={'*'} to={'/404'}/>
+                </Switch>
             </Container>
+
 
 
         </div>

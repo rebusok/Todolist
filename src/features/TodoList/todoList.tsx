@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect} from "react";
 
-import AddItemForm from "../components/AddItemForm";
-import EditableSpan from "../components/EditableSpan";
+import AddItemForm from "../../components/AddItemForm";
+import EditableSpan from "../../components/EditableSpan";
 import {Button} from "@material-ui/core";
 
 import DeleteIcon from '@material-ui/icons/Delete';
-import Task from "./Task";
+import Task from "../Task/Task";
 import {
     addTaskT, ChangeTaskTitleF,
     getTaskTodoT,
@@ -13,10 +13,10 @@ import {
     TaskDomainType,
     TaskStatuses,
     updateTaskStatusTC
-} from "./TaskReducer";
+} from "../Task/TaskReducer";
 import {ChangeTodolistTitleF, FilterType, removeTodoListT} from "./todoListsReducer";
 import {useDispatch} from "react-redux";
-import {RequestStatusType} from "../App/app-reducer";
+import {RequestStatusType} from "../../App/app-reducer";
 
 type PropsType = {
     title: string;

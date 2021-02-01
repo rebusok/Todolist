@@ -5,15 +5,16 @@ import {
     ChangeTaskTitleActionType,
     RemoveTaskType, SetTasksActionType,
     TasksReducer
-} from "../features/TaskReducer";
+} from "../features/Task/TaskReducer";
 import {
     AddTodolistActionType, ChangeTodolistEntityStatus, ChangeTodolistFilterActionType,
     ChangeTodolistTitleActionType,
     RemoveTodolistActionType, SetTodolistsActionType,
     todolistsReducer
-} from "../features/todoListsReducer";
+} from "../features/TodoList/todoListsReducer";
 import thunk, {ThunkAction} from "redux-thunk";
-import {appReducer, SetAppErrorActionType, SetAppStatusActionType} from './app-reducer';
+import {appReducer, SetAppErrorActionType, SetAppInitialActionType, SetAppStatusActionType} from './app-reducer';
+import { ActionsTypeAuth, authReducer } from '../features/Login/auth-reducer';
 
 
 // объединяя reducer-ы с помощью combineReducers,
@@ -21,7 +22,8 @@ import {appReducer, SetAppErrorActionType, SetAppStatusActionType} from './app-r
 const rootReducer = combineReducers({
     tasks: TasksReducer,
     todolists: todolistsReducer,
-    app: appReducer
+    app: appReducer,
+    auth: authReducer
 })
 // непосредственно создаём store
 
@@ -42,6 +44,8 @@ export type AppActionType =
     | SetAppStatusActionType
     | SetAppErrorActionType
     | ChangeTodolistEntityStatus
+    |SetAppInitialActionType
+| ActionsTypeAuth
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType,
     AppRootStateType,
     unknown,
