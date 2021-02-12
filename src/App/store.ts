@@ -1,20 +1,25 @@
-import {applyMiddleware, combineReducers, createStore} from 'redux';
+import {combineReducers} from 'redux';
 import {
     AddTaskActionType,
     ChangeTaskStatusActionType,
     ChangeTaskTitleActionType,
-    RemoveTaskType, SetTasksActionType,
+    RemoveTaskType,
+    SetTasksActionType,
     TasksReducer
 } from "../features/Task/TaskReducer";
 import {
-    AddTodolistActionType, ChangeTodolistEntityStatus, ChangeTodolistFilterActionType,
+    AddTodolistActionType,
+    ChangeTodolistEntityStatus,
+    ChangeTodolistFilterActionType,
     ChangeTodolistTitleActionType,
-    RemoveTodolistActionType, SetTodolistsActionType,
+    RemoveTodolistActionType,
+    SetTodolistsActionType,
     todolistsReducer
 } from "../features/TodoList/todoListsReducer";
-import thunk, {ThunkAction} from "redux-thunk";
+import ThunkMiddleware, {ThunkAction} from "redux-thunk";
 import {appReducer, SetAppErrorActionType, SetAppInitialActionType, SetAppStatusActionType} from './app-reducer';
-import { ActionsTypeAuth, authReducer } from '../features/Login/auth-reducer';
+import {authReducer} from '../features/Login/auth-reducer';
+import {configureStore} from "@reduxjs/toolkit";
 
 
 // объединяя reducer-ы с помощью combineReducers,
@@ -27,7 +32,14 @@ const rootReducer = combineReducers({
 })
 // непосредственно создаём store
 
-export const store = createStore(rootReducer, applyMiddleware(thunk));
+// export const store = createStore(rootReducer, applyMiddleware(thunk));
+
+export const store = configureStore({
+    reducer: rootReducer,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware()
+            .prepend(ThunkMiddleware)
+})
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
 export type AppActionType =
@@ -44,8 +56,8 @@ export type AppActionType =
     | SetAppStatusActionType
     | SetAppErrorActionType
     | ChangeTodolistEntityStatus
-    |SetAppInitialActionType
-| ActionsTypeAuth
+    | SetAppInitialActionType
+
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType,
     AppRootStateType,
     unknown,
