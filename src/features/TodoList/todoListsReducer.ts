@@ -109,7 +109,7 @@ export const changeTodolistEntityStatusAC = (id:string, entityStatus:RequestStat
 
 export type ChangeTodolistEntityStatus = ReturnType<typeof changeTodolistEntityStatusAC>
 export const getTodolistT = ():AppThunk => (dispatch) => {
-    dispatch(setStatusApp("loading"))
+    dispatch(setStatusApp({status:"loading"}))
     API.getTodoList()
         .then(res => {
             if (res.status === 200) {
@@ -120,12 +120,12 @@ export const getTodolistT = ():AppThunk => (dispatch) => {
             dispatch(setErrorApp(error.message))
         })
         .finally(() => {
-            dispatch(setStatusApp("succeeded"))
+            dispatch(setStatusApp({status:"succeeded"}))
         })
 }
 export const removeTodoListT = (todolistId: string):AppThunk => (dispatch) => {
     dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'))
-    dispatch(setStatusApp("loading"))
+    dispatch(setStatusApp({status:"loading"}))
     API.deleteTodoList(todolistId)
         .then((res) => {
             if(res.data.resultCode === 0){
@@ -138,13 +138,13 @@ export const removeTodoListT = (todolistId: string):AppThunk => (dispatch) => {
             dispatch(setErrorApp(error.message))
         })
         .finally(() => {
-            dispatch(setStatusApp("succeeded"))
+            dispatch(setStatusApp({status:"succeeded"}))
             dispatch(changeTodolistEntityStatusAC(todolistId, 'failed'))
         })
 }
 export const ChangeTodolistTitleF = (todolistId: string, title: string):AppThunk => (dispatch) => {
     dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'))
-    dispatch(setStatusApp("loading"))
+    dispatch(setStatusApp({status:"loading"}))
     API.updateTodoList(todolistId, title)
         .then(res => {
             if(res.data.resultCode === 0){
@@ -157,12 +157,12 @@ export const ChangeTodolistTitleF = (todolistId: string, title: string):AppThunk
             dispatch(setErrorApp(error.message))
         })
         .finally(() => {
-            dispatch(setStatusApp("succeeded"))
+            dispatch(setStatusApp({status:"succeeded"}))
             dispatch(changeTodolistEntityStatusAC(todolistId, 'failed'))
         })
 }
 export const  AddTodolistF = (title: string):AppThunk => (dispatch) => {
-    dispatch(setStatusApp("loading"))
+    dispatch(setStatusApp({status:"loading"}))
     API.createTodoList(title)
         .then(res => {
             if(res.data.resultCode === 0){
@@ -175,7 +175,7 @@ export const  AddTodolistF = (title: string):AppThunk => (dispatch) => {
             dispatch(setErrorApp(error.message))
         })
         .finally(() => {
-            dispatch(setStatusApp("succeeded"))
+            dispatch(setStatusApp({status:"succeeded"}))
         })
 }
 

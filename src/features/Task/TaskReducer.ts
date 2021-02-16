@@ -68,7 +68,7 @@ export const TasksReducer = (state: TaskStateTask = initialState, action: AppAct
     switch (action.type) {
         case 'SET-TODOLISTS': {
             const stateCopy = {...state}
-            action.todolists.forEach((tl) => {
+            action.todolists.forEach((tl:any) => {
                 stateCopy[tl.id] = []
             })
             return stateCopy;
@@ -134,7 +134,7 @@ export const ChangeTaskTitleAC = (taskId: string, title: string, todoListId: str
 
 
 export const getTaskTodoT = (todoId: string): AppThunk => (dispatch) => {
-    dispatch(setStatusApp("loading"))
+    dispatch(setStatusApp({status:"loading"}))
     APITask.getTask(todoId)
         .then(res => {
             if (res.status === 200) {
@@ -145,11 +145,11 @@ export const getTaskTodoT = (todoId: string): AppThunk => (dispatch) => {
             dispatch(setErrorApp(error.message))
         })
         .finally(() => {
-            dispatch(setStatusApp("succeeded"))
+            dispatch(setStatusApp({status:"succeeded"}))
         })
 }
 export const removeTaskT = (taskId: string, TodoListId: string): AppThunk => (dispatch) => {
-    dispatch(setStatusApp("loading"))
+    dispatch(setStatusApp({status:"loading"}))
     dispatch(changeTodolistEntityStatusAC(TodoListId, 'loading'))
     APITask.deleteTask(TodoListId, taskId)
         .then((res) => {
@@ -163,13 +163,13 @@ export const removeTaskT = (taskId: string, TodoListId: string): AppThunk => (di
             dispatch(setErrorApp(error.message))
         })
         .finally(() => {
-            dispatch(setStatusApp("succeeded"))
+            dispatch(setStatusApp({status:"succeeded"}))
             dispatch(changeTodolistEntityStatusAC(TodoListId, 'failed'))
         })
 
 }
 export const addTaskT = (todoId: string, title: string): AppThunk => (dispatch) => {
-    dispatch(setStatusApp("loading"))
+    dispatch(setStatusApp({status:"loading"}))
     dispatch(changeTodolistEntityStatusAC(todoId, 'loading'))
     APITask.createTask(todoId, title)
         .then((res) => {
@@ -183,7 +183,7 @@ export const addTaskT = (todoId: string, title: string): AppThunk => (dispatch) 
             dispatch(setErrorApp(error.message))
         })
         .finally(() => {
-            dispatch(setStatusApp("succeeded"))
+            dispatch(setStatusApp({status:"succeeded"}))
             dispatch(changeTodolistEntityStatusAC(todoId, 'failed'))
         })
 }
@@ -198,7 +198,7 @@ export const updateTaskStatusTC = (taskId: string, todolistId: string, status: T
         const task = tasksForCurrentTodolist.find(t => {
             return t.id === taskId
         })
-        dispatch(setStatusApp("loading"))
+        dispatch(setStatusApp({status:"loading"}))
         dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'))
         if (task) {
             APITask.updateTask(todolistId, taskId, {
@@ -221,7 +221,7 @@ export const updateTaskStatusTC = (taskId: string, todolistId: string, status: T
                     dispatch(setErrorApp(error.message))
                 })
                 .finally(() => {
-                    dispatch(setStatusApp("succeeded"))
+                    dispatch(setStatusApp({status:"succeeded"}))
                     dispatch(changeTodolistEntityStatusAC(todolistId, 'failed'))
                 })
 
@@ -235,7 +235,7 @@ export const ChangeTaskTitleF = (taskId: string, title: string, todoListId: stri
     const task = tasksForCurrentTodolist.find(t => {
         return t.id === taskId
     })
-    dispatch(setStatusApp("loading"))
+    dispatch(setStatusApp({status:"loading"}))
     dispatch(changeTodolistEntityStatusAC(todoListId, 'loading'))
     if (task) {
         APITask.updateTask(todoListId, taskId, {
@@ -257,7 +257,7 @@ export const ChangeTaskTitleF = (taskId: string, title: string, todoListId: stri
                 dispatch(setErrorApp(error.message))
             })
             .finally(() => {
-                dispatch(setStatusApp("succeeded"))
+                dispatch(setStatusApp({status:"succeeded"}))
                 dispatch(changeTodolistEntityStatusAC(todoListId, 'failed'))
             })
 

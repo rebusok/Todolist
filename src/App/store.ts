@@ -17,7 +17,7 @@ import {
     todolistsReducer
 } from "../features/TodoList/todoListsReducer";
 import ThunkMiddleware, {ThunkAction} from "redux-thunk";
-import {appReducer, SetAppErrorActionType, SetAppInitialActionType, SetAppStatusActionType} from './app-reducer';
+import {appReducer} from './app-reducer';
 import {authReducer} from '../features/Login/auth-reducer';
 import {configureStore} from "@reduxjs/toolkit";
 
@@ -53,15 +53,13 @@ export type AppActionType =
     | RemoveTodolistActionType
     | AddTodolistActionType
     | SetTasksActionType
-    | SetAppStatusActionType
-    | SetAppErrorActionType
     | ChangeTodolistEntityStatus
-    | SetAppInitialActionType
+
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType,
     AppRootStateType,
     unknown,
-    AppActionType>
+    any>
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
 window.store = store;

@@ -25,7 +25,7 @@ export const {setIsLoggedInAC}  = slice.actions
 
 // thunks
 export const loginTC = (data: any) => (dispatch: Dispatch) => {
-    dispatch(setStatusApp('loading'))
+    dispatch(setStatusApp({status:'loading'}))
     authAPI.login(data)
         .then(res => {
             console.log(res)
@@ -39,16 +39,16 @@ export const loginTC = (data: any) => (dispatch: Dispatch) => {
             dispatch(setErrorApp(error.message))
         })
         .finally(() => {
-            dispatch(setStatusApp("succeeded"))
+            dispatch(setStatusApp({status:"succeeded"}))
         })
 }
 export const logoutTC = () => (dispatch: Dispatch) => {
-    dispatch(setStatusApp('loading'))
+    dispatch(setStatusApp({status:'loading'}))
     authAPI.logout()
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC({value:false}))
-                dispatch(setStatusApp('succeeded'))
+                dispatch(setStatusApp({status:'succeeded'}))
             } else {
                 handleServerAppError(res.data, dispatch)
             }
