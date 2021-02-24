@@ -22,11 +22,9 @@ const TodolistList = () => {
     }, [stableDispatch, isLoggenIn])
     const changeFilter = useCallback((value: FilterType, todoListId: string) => {
 
-        stableDispatch(ChangeTodolistFilterAC(todoListId, value))
+        stableDispatch(ChangeTodolistFilterAC({id:todoListId, filter:value}))
 
     }, [stableDispatch])
-
-
 
 
 

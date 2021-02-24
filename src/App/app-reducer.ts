@@ -29,8 +29,8 @@ const slice = createSlice({
         setErrorApp(state, action: PayloadAction<{error: null | string}>){
             state.error =  action.payload.error
         },
-        setIsInitializedAC(state, action: PayloadAction<{value: boolean}>){
-            state.isInitialized =  action.payload.value
+        setIsInitializedAC(state, action: PayloadAction<{isInitialized: boolean}>){
+            state.isInitialized =  action.payload.isInitialized
         },
 
     }
@@ -54,6 +54,6 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
     })
         .finally(() => {
             dispatch(setStatusApp({status:"succeeded"}))
-            dispatch(setIsInitializedAC({value:true}))
+            dispatch(setIsInitializedAC({isInitialized:true}))
         })
 }

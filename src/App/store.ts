@@ -1,21 +1,6 @@
 import {combineReducers} from 'redux';
-import {
-    AddTaskActionType,
-    ChangeTaskStatusActionType,
-    ChangeTaskTitleActionType,
-    RemoveTaskType,
-    SetTasksActionType,
-    TasksReducer
-} from "../features/Task/TaskReducer";
-import {
-    AddTodolistActionType,
-    ChangeTodolistEntityStatus,
-    ChangeTodolistFilterActionType,
-    ChangeTodolistTitleActionType,
-    RemoveTodolistActionType,
-    SetTodolistsActionType,
-    todolistsReducer
-} from "../features/TodoList/todoListsReducer";
+import {TasksReducer} from "../features/Task/TaskReducer";
+import {todolistsReducer} from "../features/TodoList/todoListsReducer";
 import ThunkMiddleware, {ThunkAction} from "redux-thunk";
 import {appReducer} from './app-reducer';
 import {authReducer} from '../features/Login/auth-reducer';
@@ -42,19 +27,6 @@ export const store = configureStore({
 })
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
-export type AppActionType =
-    ChangeTodolistTitleActionType
-    | ChangeTodolistFilterActionType
-    | SetTodolistsActionType
-    | RemoveTaskType
-    | AddTaskActionType
-    | ChangeTaskStatusActionType
-    | ChangeTaskTitleActionType
-    | RemoveTodolistActionType
-    | AddTodolistActionType
-    | SetTasksActionType
-    | ChangeTodolistEntityStatus
-
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType,
     AppRootStateType,
