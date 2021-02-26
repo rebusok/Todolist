@@ -55,7 +55,7 @@ const slice = createSlice({
                 tasks.splice(index, 1)
             }
         },
-        AddTaskAC(state, action: PayloadAction<{task: TaskType, TodoListId: string}> ) {
+        AddTaskAC(state, action: PayloadAction<{task: TaskType}> ) {
            state[action.payload.task.todoListId].unshift(action.payload.task)
         },
         ChangeTaskStatusAC(state, action: PayloadAction<{taskId: string, status: TaskStatuses, todoListId: string}> ) {
@@ -140,7 +140,7 @@ export const addTaskT = (todoId: string, title: string): AppThunk => (dispatch) 
     APITask.createTask(todoId, title)
         .then((res) => {
             if (res.data.resultCode === 0) {
-                dispatch(AddTaskAC({task:res.data.data.item, TodoListId:todoId}))
+                dispatch(AddTaskAC({task:res.data.data.item}))
             } else {
                 handleServerAppError(res.data, dispatch)
             }
