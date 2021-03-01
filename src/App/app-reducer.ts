@@ -1,9 +1,7 @@
-import { authAPI } from "../API/API"
-import {Dispatch} from "redux";
-import {setIsLoggedInAC} from "../features/Login/auth-reducer";
+import {authAPI} from "../API/API"
 import {handleServerAppError} from "../utils/error-utils";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { setIsLoggedInAC } from "../features/Login/auth-reducer";
 
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -14,46 +12,48 @@ export type InitialStateType = {
     error: null | string
     isInitialized: boolean
 }
-const initialState: InitialStateType = {
-    status: 'loading',
-    error: null,
-    isInitialized: false
-}
-const slice = createSlice({
-    name: 'auth',
-    initialState: initialState,
-    reducers: {
-        setStatusApp(state, action: PayloadAction<{status:RequestStatusType}>){
-            state.status =  action.payload.status
-        },
-        setErrorApp(state, action: PayloadAction<{error: null | string}>){
-            state.error =  action.payload.error
-        },
-        setIsInitializedAC(state, action: PayloadAction<{isInitialized: boolean}>){
-            state.isInitialized =  action.payload.isInitialized
-        },
+export const initializeAppTC = createAsyncThunk('app/initial', async (param, {dispatch, rejectWithValue}) => {
+    dispatch(setStatusApp({status: 'loading'}))
+    try {
+        const res = await authAPI.me()
+        if (res.data.resultCode === 0) {
+            dispatch(setStatusApp({status: 'succeeded'}))
+            dispatch(setIsLoggedInAC({value:true}))
+            return
+        } else {
+            handleServerAppError(res.data, dispatch)
+            dispatch(setStatusApp({status: 'failed'}))
+            return rejectWithValue({})
+        }
+    } catch (e) {
+        dispatch(setErrorApp(e.message))
+        dispatch(setStatusApp({status: 'failed'}))
+        return rejectWithValue({})
+    }
+})
 
+const slice = createSlice({
+    name: 'app',
+    initialState: {
+        status: 'loading',
+        error: null,
+        isInitialized: false
+    } as InitialStateType,
+    reducers: {
+        setStatusApp(state, action: PayloadAction<{ status: RequestStatusType }>) {
+            state.status = action.payload.status
+        },
+        setErrorApp(state, action: PayloadAction<{ error: null | string }>) {
+            state.error = action.payload.error
+        },
+    },
+    extraReducers: builder => {
+        builder.addCase(initializeAppTC.fulfilled, (state ) => {
+            state.isInitialized = true
+        })
     }
 })
 
 export const appReducer = slice.reducer
-export const {setStatusApp, setErrorApp, setIsInitializedAC}  = slice.actions
+export const {setStatusApp, setErrorApp} = slice.actions
 
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-    dispatch(setStatusApp({status:'loading'}))
-    authAPI.me().then(res => {
-        if (res.data.resultCode === 0) {
-            dispatch(setIsLoggedInAC({value:true}));
-
-        } else {
-            handleServerAppError(res.data, dispatch)
-        }
-    })
-        .catch(error => {
-        dispatch(setErrorApp(error.message))
-    })
-        .finally(() => {
-            dispatch(setStatusApp({status:"succeeded"}))
-            dispatch(setIsInitializedAC({isInitialized:true}))
-        })
-}

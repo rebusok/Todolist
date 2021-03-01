@@ -19,6 +19,7 @@ import {NavLink, Redirect, Route, Switch} from 'react-router-dom';
 import {Login} from '../features/Login/Login';
 import TodolistList from "../features/TodoList/TodolistList";
 import {logoutTC} from "../features/Login/auth-reducer";
+import {ErrorSnackbar} from "../components/ErrorSnackbar";
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
     }
     return (
         <div className="App">
+            <ErrorSnackbar/>
             <AppBar>
                 <Toolbar>
                     <IconButton edge='start' color='inherit' aria-label='menu'>

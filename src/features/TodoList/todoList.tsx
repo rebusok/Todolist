@@ -7,12 +7,12 @@ import {Button} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Task from "../Task/Task";
 import {
-    addTaskT, ChangeTaskTitleF,
-    getTaskTodoT,
+    addTaskT,
+    fetchTasks,
     removeTaskT,
     TaskDomainType,
-    TaskStatuses,
-    updateTaskStatusTC
+    TaskStatuses, updateTaskTC,
+
 } from "../Task/TaskReducer";
 import {ChangeTodolistTitleF, FilterType, removeTodoListT} from "./todoListsReducer";
 import {useDispatch} from "react-redux";
@@ -23,35 +23,35 @@ type PropsType = {
     tasks: Array<TaskDomainType>;
     changeFilter: (value: FilterType, todoListId: string) => void;
     filter: FilterType
-    idTodo: string
+    TodoListId: string
     entityStatus: RequestStatusType
 }
 
 
 const TodoList = React.memo((props: PropsType) => {
 
-    const {tasks, filter, title, changeFilter, idTodo} = props;
+    const {tasks, filter, title, changeFilter, TodoListId} = props;
     const dispatch = useDispatch();
     const stableDispatch = useCallback(dispatch, [])
 
     useEffect(() => {
-        stableDispatch(getTaskTodoT(idTodo))
-    }, [stableDispatch, idTodo])
+        stableDispatch(fetchTasks(TodoListId))
+    }, [stableDispatch, TodoListId])
 
 
     const addTasks = useCallback((value: string) => {
-        stableDispatch(addTaskT(idTodo, value))
-    }, [stableDispatch, idTodo])
+        stableDispatch(addTaskT({title:value, todolistId:TodoListId}))
+    }, [stableDispatch, TodoListId])
 
 
     const onChangesTitle = useCallback((value: string) => {
-        stableDispatch(ChangeTodolistTitleF(idTodo, value))
-    }, [stableDispatch, idTodo])
+        stableDispatch(ChangeTodolistTitleF({title:value, todolistId:TodoListId}))
+    }, [stableDispatch, TodoListId])
 
 
     const onRemoveHandler = useCallback(() => {
-        stableDispatch(removeTodoListT(idTodo))
-    }, [stableDispatch, idTodo])
+        stableDispatch(removeTodoListT({todolistId:TodoListId}))
+    }, [stableDispatch, TodoListId])
 
 
     let filteredTodoList = tasks;
@@ -62,22 +62,21 @@ const TodoList = React.memo((props: PropsType) => {
         filteredTodoList = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
     const onChangTaskStatus = useCallback((id: string, status: TaskStatuses) => {
-        stableDispatch(updateTaskStatusTC(id, idTodo, status));
-    }, [stableDispatch, idTodo])
+        stableDispatch(updateTaskTC({taskId:id, model:{status}, todolistId:TodoListId}))
+    }, [stableDispatch, TodoListId])
 
     const onChangesTaskTitle = useCallback((id: string, title: string) => {
-        debugger
-        stableDispatch(ChangeTaskTitleF(id, title, idTodo))
-    }, [stableDispatch, idTodo])
+        stableDispatch(updateTaskTC({taskId:id, model:{title}, todolistId:TodoListId}))
+    }, [stableDispatch, TodoListId])
 
-    const onDeleteHandler = useCallback((id: string) => {
-        stableDispatch(removeTaskT(id, idTodo))
-    }, [stableDispatch, idTodo])
+    const onDeleteHandler = useCallback((taskId: string) => {
+        stableDispatch(removeTaskT({taskId, TodoListId}))
+    }, [stableDispatch, TodoListId])
 
 
-    const onChangeAllHandler = () => changeFilter('All', idTodo);
-    const onChangeActiveHandler = () => changeFilter('Active', idTodo);
-    const onChangeCompletedHandler = () => changeFilter('Completed', idTodo);
+    const onChangeAllHandler = () => changeFilter('All', TodoListId);
+    const onChangeActiveHandler = () => changeFilter('Active', TodoListId);
+    const onChangeCompletedHandler = () => changeFilter('Completed', TodoListId);
 
     return (
         <div>

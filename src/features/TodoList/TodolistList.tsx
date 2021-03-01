@@ -4,7 +4,7 @@ import AddItemForm from "../../components/AddItemForm";
 import TodoList from "./todoList";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../App/store";
-import {AddTodolistF, ChangeTodolistFilterAC, FilterType, getTodolistT, TodoListDomainType} from "./todoListsReducer";
+import {addTodolistF, ChangeTodolistFilterAC, FilterType, getTodolistT, TodoListDomainType} from "./todoListsReducer";
 import {TaskStateTask} from "../Task/TaskReducer";
 import {Redirect} from "react-router-dom";
 
@@ -30,7 +30,7 @@ const TodolistList = () => {
 
 
     const addTodoList = (title: string) => {
-        dispatch(AddTodolistF(title))
+        dispatch(addTodolistF({title}))
     }
     if (!isLoggenIn) {
         return <Redirect to={'/login'}/>
@@ -50,7 +50,7 @@ const TodolistList = () => {
                                 <Paper style={{padding: '10px'}}>
                                     <TodoList
                                         key={id}
-                                        idTodo={id}
+                                        TodoListId={id}
                                         title={title}
                                         tasks={tasks[id]}
                                         entityStatus={entityStatus}
