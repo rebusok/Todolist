@@ -1,6 +1,6 @@
 // import { setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType } from '../app/app-reducer';
-import { Dispatch } from 'redux';
-import { ResponseType } from '../API/API';
+import {Dispatch} from 'redux';
+import {ResponseType} from '../API/API';
 import {SetAppErrorActionType, SetAppStatusActionType, setErrorApp, setStatusApp} from "../App/app-reducer";
 
 // generic function
@@ -13,7 +13,16 @@ export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: ErrorUt
     dispatch(setStatusApp('failed'))
 }
 
-export const handleServerNetworkError = (error: {message: string}, dispatch: ErrorUtilsDispatchType) => {
+export function* handleServerAppErrors<T>(data: ResponseType<T>, put: any) {
+    if (data.messages.length) {
+        yield put(setErrorApp(data.messages[0]))
+    } else {
+        yield  put(setErrorApp('Some error occurred'))
+    }
+    yield put(setStatusApp('failed'))
+}
+
+export const handleServerNetworkError = (error: { message: string }, dispatch: ErrorUtilsDispatchType) => {
     dispatch(setErrorApp(error.message))
     dispatch(setStatusApp('failed'))
 }

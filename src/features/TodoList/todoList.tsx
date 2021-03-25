@@ -7,9 +7,7 @@ import {Button} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Task from "../Task/Task";
 import {
-    addTaskT, ChangeTaskTitleF,
-    getTaskTodoT,
-    removeTaskT,
+    ChangeTaskTitleF,
     TaskDomainType,
     TaskStatuses,
     updateTaskStatusTC
@@ -17,6 +15,7 @@ import {
 import {ChangeTodolistTitleF, FilterType, removeTodoListT} from "./todoListsReducer";
 import {useDispatch} from "react-redux";
 import {RequestStatusType} from "../../App/app-reducer";
+import {getTaskTodo, removeTask, addTask} from "../Task/Tasks-sagas";
 
 type PropsType = {
     title: string;
@@ -35,12 +34,12 @@ const TodoList = React.memo((props: PropsType) => {
     const stableDispatch = useCallback(dispatch, [])
 
     useEffect(() => {
-        stableDispatch(getTaskTodoT(idTodo))
+        stableDispatch(getTaskTodo(idTodo))
     }, [stableDispatch, idTodo])
 
 
     const addTasks = useCallback((value: string) => {
-        stableDispatch(addTaskT(idTodo, value))
+        stableDispatch(addTask(idTodo, value))
     }, [stableDispatch, idTodo])
 
 
@@ -71,7 +70,7 @@ const TodoList = React.memo((props: PropsType) => {
     }, [stableDispatch, idTodo])
 
     const onDeleteHandler = useCallback((id: string) => {
-        stableDispatch(removeTaskT(id, idTodo))
+        stableDispatch(removeTask(id, idTodo))
     }, [stableDispatch, idTodo])
 
 

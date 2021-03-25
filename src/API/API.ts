@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import { TodolistType } from "../features/TodoList/todoListsReducer";
 import { TaskType } from "../features/Task/TaskReducer";
 
@@ -34,38 +34,43 @@ export enum TaskPriorities {
     Urgently = 3,
     Later = 4
 }
-
+export type getTasksResponse = {
+    error: string | null
+    totalCount: number
+    items: TaskType[]
+}
 
 
 const axiosInstance = axios.create(configOMB);
 
 export const API = {
+
     getTodoList: () => {
         return axiosInstance.get<Array<TodolistType>>('todo-lists')
     },
-    createTodoList: (title:string) => {
+    createTodoList: (title:string):Promise<AxiosResponse<ResponseType<{item:TodolistType}>>>  => {
         return axiosInstance.post<ResponseType<{item:TodolistType}>>('todo-lists', {title})
     },
-    deleteTodoList: (todoId:string) => {
+    deleteTodoList: (todoId:string):Promise<AxiosResponse<ResponseType>> => {
         return axiosInstance.delete<ResponseType>(`todo-lists/${todoId}`)
     },
-    updateTodoList: (todoId:string, title:string) => {
+    updateTodoList: (todoId:string, title:string):Promise<AxiosResponse<ResponseType>> => {
         return axiosInstance.put<ResponseType>(`todo-lists/${todoId}`, {title})
     }
 
 }
 
 export const APITask = {
-    getTask: (todoId:string) => {
-        return axiosInstance.get<{items: Array<TaskType>}>(`todo-lists/${todoId}/tasks`)
+    getTask: (todoId:string):Promise<AxiosResponse<getTasksResponse>>   => {
+        return axiosInstance.get<getTasksResponse>(`todo-lists/${todoId}/tasks`)
     },
-    createTask: (todoId:string,title:string) => {
+    createTask: (todoId:string,title:string):Promise<AxiosResponse<ResponseType<{item:TaskType}>>>  => {
         return axiosInstance.post<ResponseType<{item:TaskType}>>(`todo-lists/${todoId}/tasks`, {title})
     },
-    deleteTask: (todoId:string, taskId:string) => {
+    deleteTask: (todoId:string, taskId:string):Promise<AxiosResponse<ResponseType>> => {
         return axiosInstance.delete<ResponseType>(`todo-lists/${todoId}/tasks/${taskId}`)
     },
-    updateTask: (todoId:string,taskId:string, model: UpdateTaskModelType) => {
+    updateTask: (todoId:string,taskId:string, model: UpdateTaskModelType):Promise<AxiosResponse<ResponseType<TaskType>>>  => {
         return axiosInstance.put<ResponseType<TaskType>>(`todo-lists/${todoId}/tasks/${taskId}`, model)
     }
 

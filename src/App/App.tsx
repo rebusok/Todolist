@@ -14,11 +14,12 @@ import {
 import {Menu} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {initializeAppTC, RequestStatusType} from "./app-reducer";
+import {RequestStatusType} from "./app-reducer";
 import {NavLink, Redirect, Route, Switch} from 'react-router-dom';
 import {Login} from '../features/Login/Login';
 import TodolistList from "../features/TodoList/TodolistList";
 import {logoutTC} from "../features/Login/auth-reducer";
+import {initializeApp} from "./app-sagas";
 
 
 const App = () => {
@@ -28,7 +29,7 @@ const App = () => {
     const dispatch = useDispatch()
     const stableDispatch = useCallback(dispatch, [])
     useEffect(() => {
-        stableDispatch(initializeAppTC())
+        stableDispatch(initializeApp())
     }, [stableDispatch])
 
     if (!isInitialized) {

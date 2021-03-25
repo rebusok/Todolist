@@ -133,60 +133,7 @@ export const ChangeTaskTitleAC = (taskId: string, title: string, todoListId: str
 }
 
 
-export const getTaskTodoT = (todoId: string): AppThunk => (dispatch) => {
-    dispatch(setStatusApp("loading"))
-    APITask.getTask(todoId)
-        .then(res => {
-            if (res.status === 200) {
-                dispatch(setTasksAC(res.data.items, todoId))
-            }
-        })
-        .catch(error => {
-            dispatch(setErrorApp(error.message))
-        })
-        .finally(() => {
-            dispatch(setStatusApp("succeeded"))
-        })
-}
-export const removeTaskT = (taskId: string, TodoListId: string): AppThunk => (dispatch) => {
-    dispatch(setStatusApp("loading"))
-    dispatch(changeTodolistEntityStatusAC(TodoListId, 'loading'))
-    APITask.deleteTask(TodoListId, taskId)
-        .then((res) => {
-            if (res.data.resultCode === 0) {
-                dispatch(RemoveTaskAC(taskId, TodoListId))
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch(error => {
-            dispatch(setErrorApp(error.message))
-        })
-        .finally(() => {
-            dispatch(setStatusApp("succeeded"))
-            dispatch(changeTodolistEntityStatusAC(TodoListId, 'failed'))
-        })
 
-}
-export const addTaskT = (todoId: string, title: string): AppThunk => (dispatch) => {
-    dispatch(setStatusApp("loading"))
-    dispatch(changeTodolistEntityStatusAC(todoId, 'loading'))
-    APITask.createTask(todoId, title)
-        .then((res) => {
-            if (res.data.resultCode === 0) {
-                dispatch(AddTaskAC(res.data.data.item, todoId))
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch(error => {
-            dispatch(setErrorApp(error.message))
-        })
-        .finally(() => {
-            dispatch(setStatusApp("succeeded"))
-            dispatch(changeTodolistEntityStatusAC(todoId, 'failed'))
-        })
-}
 export const updateTaskStatusTC = (taskId: string, todolistId: string, status: TaskStatuses) => {
     return (dispatch: Dispatch, getState: () => AppRootStateType) => {
 
@@ -210,7 +157,7 @@ export const updateTaskStatusTC = (taskId: string, todolistId: string, status: T
                 status: status
             })
                 .then((res) => {
-                    if(res.data.resultCode === 0){
+                    if (res.data.resultCode === 0) {
                         dispatch(ChangeTaskStatusAC(taskId, status, todolistId))
                         dispatch(changeTodolistEntityStatusAC(todolistId, 'failed'))
                     } else {
@@ -247,7 +194,7 @@ export const ChangeTaskTitleF = (taskId: string, title: string, todoListId: stri
             status: task.status
         })
             .then((res) => {
-                if(res.data.resultCode === 0){
+                if (res.data.resultCode === 0) {
                     dispatch(ChangeTaskTitleAC(taskId, title, todoListId))
                 } else {
                     handleServerAppError(res.data, dispatch)
