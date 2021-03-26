@@ -23,6 +23,7 @@ import createSagaMiddleware from 'redux-saga'
 import {all} from 'redux-saga/effects'
 import {tasksWatcherSaga} from "../features/Task/Tasks-sagas";
 import {appWatcherSaga} from "./app-sagas";
+import { todoListWatcherSaga } from '../features/TodoList/todoLists-sagas';
 
 
 // объединяя reducer-ы с помощью combineReducers,
@@ -40,7 +41,7 @@ export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, s
 sagaMiddleware.run(rootWatcher)
 
 function* rootWatcher () {
-    yield all([appWatcherSaga(), tasksWatcherSaga()])
+    yield all([appWatcherSaga(), tasksWatcherSaga(), todoListWatcherSaga()])
 }
 
 

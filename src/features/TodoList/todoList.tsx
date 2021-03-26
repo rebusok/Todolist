@@ -6,16 +6,12 @@ import {Button} from "@material-ui/core";
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import Task from "../Task/Task";
-import {
-    ChangeTaskTitleF,
-    TaskDomainType,
-    TaskStatuses,
-    updateTaskStatusTC
-} from "../Task/TaskReducer";
-import {ChangeTodolistTitleF, FilterType, removeTodoListT} from "./todoListsReducer";
+import {TaskDomainType, TaskStatuses,} from "../Task/TaskReducer";
+import {FilterType} from "./todoListsReducer";
 import {useDispatch} from "react-redux";
 import {RequestStatusType} from "../../App/app-reducer";
-import {getTaskTodo, removeTask, addTask} from "../Task/Tasks-sagas";
+import {addTask, ChangeTaskTitle, getTaskTodo, removeTask, updateTaskStatus} from "../Task/Tasks-sagas";
+import {ChangeTodolistTitle, removeTodoList} from "./todoLists-sagas";
 
 type PropsType = {
     title: string;
@@ -44,12 +40,12 @@ const TodoList = React.memo((props: PropsType) => {
 
 
     const onChangesTitle = useCallback((value: string) => {
-        stableDispatch(ChangeTodolistTitleF(idTodo, value))
+        stableDispatch(ChangeTodolistTitle(idTodo, value))
     }, [stableDispatch, idTodo])
 
 
     const onRemoveHandler = useCallback(() => {
-        stableDispatch(removeTodoListT(idTodo))
+        stableDispatch(removeTodoList(idTodo))
     }, [stableDispatch, idTodo])
 
 
@@ -61,23 +57,21 @@ const TodoList = React.memo((props: PropsType) => {
         filteredTodoList = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
     const onChangTaskStatus = useCallback((id: string, status: TaskStatuses) => {
-        stableDispatch(updateTaskStatusTC(id, idTodo, status));
+        stableDispatch(updateTaskStatus(id, idTodo, status));
     }, [stableDispatch, idTodo])
 
     const onChangesTaskTitle = useCallback((id: string, title: string) => {
         debugger
-        stableDispatch(ChangeTaskTitleF(id, title, idTodo))
+        stableDispatch(ChangeTaskTitle(id, title, idTodo))
     }, [stableDispatch, idTodo])
 
     const onDeleteHandler = useCallback((id: string) => {
         stableDispatch(removeTask(id, idTodo))
     }, [stableDispatch, idTodo])
 
-
     const onChangeAllHandler = () => changeFilter('All', idTodo);
     const onChangeActiveHandler = () => changeFilter('Active', idTodo);
     const onChangeCompletedHandler = () => changeFilter('Completed', idTodo);
-
     return (
         <div>
             <EditableSpan value={title} onChanges={onChangesTitle} blured={false}/>

@@ -4,7 +4,6 @@ import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 import {setErrorApp, setIsInitializedAC, setStatusApp} from "./app-reducer";
 
 export function* initializeAppSaga() {
-    console.log('reredasd')
     const res = yield call(authAPI.me)
     yield put(setStatusApp('loading'))
     try {
@@ -25,7 +24,6 @@ export const initializeApp = () => {
     return {type: 'APP/SET-INITIALS-APP'}
 }
 export function* appWatcherSaga() {
-    console.log('generate')
     yield takeEvery('APP/SET-INITIALS-APP', initializeAppSaga)
 
 }

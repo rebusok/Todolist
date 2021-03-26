@@ -4,9 +4,10 @@ import AddItemForm from "../../components/AddItemForm";
 import TodoList from "./todoList";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../App/store";
-import {AddTodolistF, ChangeTodolistFilterAC, FilterType, getTodolistT, TodoListDomainType} from "./todoListsReducer";
+import {ChangeTodolistFilterAC, FilterType, TodoListDomainType} from "./todoListsReducer";
 import {TaskStateTask} from "../Task/TaskReducer";
 import {Redirect} from "react-router-dom";
+import {AddTodolist, getTodolist} from "./todoLists-sagas";
 
 const TodolistList = () => {
     const todoList = useSelector<AppRootStateType, Array<TodoListDomainType>>(state => state.todolists)
@@ -18,7 +19,7 @@ const TodolistList = () => {
         if (!isLoggenIn) {
             return
         }
-        stableDispatch(getTodolistT())
+        stableDispatch(getTodolist())
     }, [stableDispatch, isLoggenIn])
     const changeFilter = useCallback((value: FilterType, todoListId: string) => {
 
@@ -32,7 +33,7 @@ const TodolistList = () => {
 
 
     const addTodoList = (title: string) => {
-        dispatch(AddTodolistF(title))
+        dispatch(AddTodolist(title))
     }
     if (!isLoggenIn) {
         return <Redirect to={'/login'}/>

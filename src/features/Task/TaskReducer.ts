@@ -1,9 +1,5 @@
-import {AppActionType, AppRootStateType, AppThunk} from "../../App/store";
-import {APITask, TaskPriorities} from "../../API/API";
-import {Dispatch} from "redux";
-import {setErrorApp, setStatusApp} from "../../App/app-reducer";
-import {changeTodolistEntityStatusAC} from "../TodoList/todoListsReducer";
-import {handleServerAppError} from "../../utils/error-utils";
+import {AppActionType} from "../../App/store";
+import {TaskPriorities} from "../../API/API";
 
 
 const initialState: TaskStateTask = {}
@@ -132,84 +128,5 @@ export const ChangeTaskTitleAC = (taskId: string, title: string, todoListId: str
     return {type: 'CHANGE-TASK-TITLE', taskId, title, todoListId}
 }
 
-
-
-export const updateTaskStatusTC = (taskId: string, todolistId: string, status: TaskStatuses) => {
-    return (dispatch: Dispatch, getState: () => AppRootStateType) => {
-
-// так как мы обязаны на сервер отправить все св-ва, которые сервер ожидает, а не только
-// те, которые мы хотим обновить, соответственно нам нужно в этом месте взять таску целиком  // чтобы у неё отобрать остальные св-ва
-
-        const allTasksFromState = getState().tasks;
-        const tasksForCurrentTodolist = allTasksFromState[todolistId]
-        const task = tasksForCurrentTodolist.find(t => {
-            return t.id === taskId
-        })
-        dispatch(setStatusApp("loading"))
-        dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'))
-        if (task) {
-            APITask.updateTask(todolistId, taskId, {
-                title: task.title,
-                startDate: task.startDate,
-                priority: task.priority,
-                description: task.description,
-                deadline: task.deadline,
-                status: status
-            })
-                .then((res) => {
-                    if (res.data.resultCode === 0) {
-                        dispatch(ChangeTaskStatusAC(taskId, status, todolistId))
-                        dispatch(changeTodolistEntityStatusAC(todolistId, 'failed'))
-                    } else {
-                        handleServerAppError(res.data, dispatch)
-                    }
-                })
-                .catch(error => {
-                    dispatch(setErrorApp(error.message))
-                })
-                .finally(() => {
-                    dispatch(setStatusApp("succeeded"))
-                    dispatch(changeTodolistEntityStatusAC(todolistId, 'failed'))
-                })
-
-        }
-    }
-}
-
-export const ChangeTaskTitleF = (taskId: string, title: string, todoListId: string): AppThunk => (dispatch, getState: () => AppRootStateType) => {
-    const allTasksFromState = getState().tasks;
-    const tasksForCurrentTodolist = allTasksFromState[todoListId]
-    const task = tasksForCurrentTodolist.find(t => {
-        return t.id === taskId
-    })
-    dispatch(setStatusApp("loading"))
-    dispatch(changeTodolistEntityStatusAC(todoListId, 'loading'))
-    if (task) {
-        APITask.updateTask(todoListId, taskId, {
-            title: title,
-            deadline: task.deadline,
-            description: task.description,
-            priority: task.priority,
-            startDate: task.startDate,
-            status: task.status
-        })
-            .then((res) => {
-                if (res.data.resultCode === 0) {
-                    dispatch(ChangeTaskTitleAC(taskId, title, todoListId))
-                } else {
-                    handleServerAppError(res.data, dispatch)
-                }
-            })
-            .catch(error => {
-                dispatch(setErrorApp(error.message))
-            })
-            .finally(() => {
-                dispatch(setStatusApp("succeeded"))
-                dispatch(changeTodolistEntityStatusAC(todoListId, 'failed'))
-            })
-
-
-    }
-}
 
 
